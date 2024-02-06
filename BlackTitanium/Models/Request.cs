@@ -1,13 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using JsonSubTypes;
 using Newtonsoft.Json;
 
 namespace BlackTitanium.Models;
 
-public class User {
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int UserId { get; set; }
+[JsonConverter(typeof(JsonSubtypes), "type")]
+[JsonSubtypes.KnownSubType(typeof(RegisterRequest), "register")]
+[JsonSubtypes.KnownSubType(typeof(LoginRequest), "login")]
+public class Request {
+}
 
+public class RegisterRequest : Request {
     [MaxLength(50)]
     public string LastName { get; set; } = string.Empty;
 
@@ -17,13 +21,11 @@ public class User {
     [MaxLength(50)]
     public string MiddleName { get; set; } = string.Empty;
 
+
     public string FullName => $"{LastName} {FirstName} {MiddleName}";
 
     [ForeignKey(nameof(Gender))]
     public int GenderId { get; set; }
-
-    [JsonIgnore]
-    public virtual Gender? Gender { get; set; }
 
     public ulong Phone { get; set; }
 
@@ -39,11 +41,13 @@ public class User {
     [MaxLength(255)]
     public string Login { get; set; } = string.Empty;
 
-    [MaxLength(8)]
-    [JsonIgnore]
-    public string PasswordSalt { get; set; } = string.Empty;
+    [MinLength(8)]
+    public string Password { get; set; } = string.Empty;
+}
 
-    [MinLength(64), MaxLength(64)]
-    [JsonIgnore]
-    public string PasswordHash { get; set; } = string.Empty;
+public class LoginRequest {
+    [MaxLength(255)]
+    public string Login { get; set; } = string.Empty;
+    [MinLength(8)]
+    public string Password { get; set; } = string.Empty;
 }
