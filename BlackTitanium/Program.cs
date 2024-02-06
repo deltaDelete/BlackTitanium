@@ -1,9 +1,12 @@
 using System.Text.Json;
 using BlackTitanium.Models;
+using JavaScriptEngineSwitcher.ChakraCore;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using React.AspNet;
 
 namespace BlackTitanium;
 
@@ -33,10 +36,16 @@ internal static class Program {
         // Swagger
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+
+        // React
+        services.AddMemoryCache();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddReact();
+        services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
+            .AddChakraCore();
     }
 
     public static void ConfigureApp(this WebApplication app) {
-
         if (app.Environment.IsDevelopment()) {
             app.UseDeveloperExceptionPage();
             // Swagger
@@ -49,15 +58,19 @@ internal static class Program {
 
         app.UseAuthentication();
         app.UseAuthorization();
-        
+
         // TODO LOW: Свой формат ошибок
-        app.UseExceptionHandler(a => a.Run(async context =>
-        {
+        app.UseExceptionHandler(a => a.Run(async context => {
             var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
             var exception = exceptionHandlerPathFeature?.Error;
             await context.Response.WriteAsJsonAsync(new Error() {
                 Message = exception?.Message ?? ""
             });
         }));
+        
+        // React
+        app.UseReact(config => { });
+        app.UseDefaultFiles();
+        app.UseStaticFiles();
     }
 }
