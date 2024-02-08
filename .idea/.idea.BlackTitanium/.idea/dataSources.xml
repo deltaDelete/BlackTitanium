@@ -8,7 +8,7 @@
       <jdbc-url>jdbc:h2:tcp://localhost:9092/~/.local/share/h2/test</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="blacktitanium@localhost" uuid="474f0575-af31-47a1-9a52-f23acbeffc83">
+    <data-source source="LOCAL" name="blacktitanium@192.168.1.102" uuid="474f0575-af31-47a1-9a52-f23acbeffc83">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
