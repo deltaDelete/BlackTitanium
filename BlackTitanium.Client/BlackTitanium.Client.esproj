@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/0.5.128-alpha">
+    <PropertyGroup>
+        <StartupCommand>npm run dev</StartupCommand>
+        <!-- or if you use yarn-->
+        <!-- <StartupCommand>yarn dev</StartupCommand>-->
+        <JavaScriptTestFramework>Jest</JavaScriptTestFramework>
+        <!-- Allows the build (or compile) script located on package.json to run on Build -->
+        <ShouldRunBuildScript>false</ShouldRunBuildScript>
+        <!-- Folder where production build objects will be placed -->
+        <PublishAssetsDirectory>$(MSBuildProjectDirectory)\dist</PublishAssetsDirectory>
+        <!-- Without this dotnet-cli doesn't want to add project -->
+        <ProjectTypeGuids>54A90642-561A-4BB1-A94E-469ADEE60C69</ProjectTypeGuids>
+    </PropertyGroup>
+</Project>

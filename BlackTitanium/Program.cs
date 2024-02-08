@@ -1,12 +1,8 @@
-using System.Text.Json;
 using BlackTitanium.Models;
-using JavaScriptEngineSwitcher.ChakraCore;
-using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using React.AspNet;
 
 namespace BlackTitanium;
 
@@ -37,12 +33,8 @@ internal static class Program {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
-        // React
         services.AddMemoryCache();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        services.AddReact();
-        services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
-            .AddChakraCore();
     }
 
     public static void ConfigureApp(this WebApplication app) {
@@ -68,8 +60,6 @@ internal static class Program {
             });
         }));
         
-        // React
-        app.UseReact(config => { });
         app.UseDefaultFiles();
         app.UseStaticFiles();
     }
